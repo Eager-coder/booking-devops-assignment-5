@@ -49,3 +49,6 @@ Jenkins history stays in the named Compose volume. The Python base is pinned by 
 
 ## Submission
 Reports are in `submission/`; actual Jenkins screenshots and build logs are in `evidence/`. Refer to the practical report for the demonstrated builds. The initial setup script and Compose file reproduce the job on another Docker host. The reused CSV implementation and seven original test methods retain their MIT license; two booking-specific test methods and the Docker/Jenkins workflow were added for Assignment 5.
+
+## Verified environment
+The demonstration on 22 October 2026 used Jenkins 2.580.1, Docker Engine 29.8.2 (arm64), and Python 3.12.15 inside the pinned image. The reference CSV has SHA-256 `008e253486ccc71feddf9fa48bcbeee353e319b0d3c803f8f2251673f43a291d`. Re-running on another architecture may select a different platform image from the same pinned multi-platform manifest.
