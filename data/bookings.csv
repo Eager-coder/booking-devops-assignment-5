@@ -1,0 +1,6 @@
+booking_id,room_id,duration_minutes
+B001,R101,30
+B002,R102,60
+B003,R101,90
+B004,R103,60
+B005,R102,120
