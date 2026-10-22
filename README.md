@@ -52,3 +52,11 @@ Reports are in `submission/`; actual Jenkins screenshots and build logs are in `
 
 ## Verified environment
 The demonstration on 22 October 2026 used Jenkins 2.580.1, Docker Engine 29.8.2 (arm64), and Python 3.12.15 inside the pinned image. The reference CSV has SHA-256 `008e253486ccc71feddf9fa48bcbeee353e319b0d3c803f8f2251673f43a291d`. Re-running on another architecture may select a different platform image from the same pinned multi-platform manifest.
+
+## Submission evidence
+- [Six-page report](submission/Assignment_5_Sultan_Turan.pdf): four-page analytical report (12 pt, 1.5 spacing) and two-page practical report with screenshots.
+- [Stage view](evidence/jenkins-pipeline.png), [SCM-triggered build details](evidence/jenkins-build4.png), and [successful deployment console](evidence/jenkins-proof.png).
+- [Build 4 console log](evidence/build-4-console.txt) and [metadata](evidence/build-4-metadata.json): automatic SCM trigger, nine passing tests, Docker build, analysis and CD smoke test.
+- [Result JSON](evidence/result.json): deterministic synthetic booking statistics and input hash.
+
+Build 3 was the first successful complete run; build 4 verified automatic triggering for commit `6a98207`. Builds 1 and 2 failed during job setup and were retained. Later documentation-only commits may produce additional builds; the report identifies the specific captured run.

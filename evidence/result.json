@@ -1,0 +1,12 @@
+{
+  "input_sha256": "008e253486ccc71feddf9fa48bcbeee353e319b0d3c803f8f2251673f43a291d",
+  "column": "duration_minutes",
+  "statistics": {
+    "n": 5,
+    "mean": 72.0,
+    "median": 60.0,
+    "minimum": 30.0,
+    "maximum": 120.0,
+    "sample_sd": 34.20526275297414
+  }
+}

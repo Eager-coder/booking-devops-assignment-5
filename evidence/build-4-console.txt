@@ -1,0 +1,164 @@
+Started by an SCM change
+Checking out git https://github.com/Eager-coder/booking-devops-assignment-5.git into /var/jenkins_home/workspace/booking-analysis@script/94e381139363b71e24f267a9aeca3744424f003ec04e1c7925e2cdbdddb8fc9a to read Jenkinsfile
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/booking-analysis@script/94e381139363b71e24f267a9aeca3744424f003ec04e1c7925e2cdbdddb8fc9a/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/Eager-coder/booking-devops-assignment-5.git # timeout=10
+Fetching upstream changes from https://github.com/Eager-coder/booking-devops-assignment-5.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git fetch --tags --force --progress -- https://github.com/Eager-coder/booking-devops-assignment-5.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 6a98207ae6dd92f7f8f49d29c110fbc83710d854 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 6a98207ae6dd92f7f8f49d29c110fbc83710d854 # timeout=10
+Commit message: "Document verified runtime and reproducible sample result"
+ > git rev-list --no-walk d5007982ddba2cb07e864727b7be78c37a6c6a94 # timeout=10
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/booking-analysis
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/booking-analysis/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/Eager-coder/booking-devops-assignment-5.git # timeout=10
+Fetching upstream changes from https://github.com/Eager-coder/booking-devops-assignment-5.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git fetch --tags --force --progress -- https://github.com/Eager-coder/booking-devops-assignment-5.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision 6a98207ae6dd92f7f8f49d29c110fbc83710d854 (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f 6a98207ae6dd92f7f8f49d29c110fbc83710d854 # timeout=10
+Commit message: "Document verified runtime and reproducible sample result"
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] timeout
+Timeout set to expire in 10 min
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Unit tests)
+[Pipeline] sh
++ sh scripts/test-commits.sh
+Testing commit 6a98207ae6dd92f7f8f49d29c110fbc83710d854
+test_booking_statistics (test_bookings.BookingTests.test_booking_statistics) ... ok
+test_input_hash_matches_actual_bytes (test_bookings.BookingTests.test_input_hash_matches_actual_bytes) ... ok
+test_cli_failure (test_summary.SummaryTests.test_cli_failure) ... ok
+test_cli_success (test_summary.SummaryTests.test_cli_success) ... ok
+test_input_cannot_be_overwritten (test_summary.SummaryTests.test_input_cannot_be_overwritten) ... ok
+test_known_answer (test_summary.SummaryTests.test_known_answer) ... ok
+test_missing_file (test_summary.SummaryTests.test_missing_file) ... ok
+test_negative_and_constant (test_summary.SummaryTests.test_negative_and_constant) ... ok
+test_reject_invalid_inputs (test_summary.SummaryTests.test_reject_invalid_inputs) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.078s
+
+OK
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build Docker image)
+[Pipeline] sh
++ docker build --label org.opencontainers.image.revision=6a98207ae6dd92f7f8f49d29c110fbc83710d854 -t booking-analysis:6a98207ae6dd92f7f8f49d29c110fbc83710d854 .
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  32.26kB
+Step 1/8 : FROM python:3.12-slim@sha256:cb33f7f771ecec2ef1225cf39b159591a040391bd73e4c01f00fdfc4c47611d2
+ ---> 7efd45553a98
+Step 2/8 : WORKDIR /app
+ ---> Using cache
+ ---> 47afb689dbae
+Step 3/8 : RUN useradd --uid 10001 --create-home researcher
+ ---> Using cache
+ ---> b5a3e9705016
+Step 4/8 : COPY summary.py ./
+ ---> Using cache
+ ---> 3013bbe7c378
+Step 5/8 : COPY data/bookings.csv ./data/bookings.csv
+ ---> Using cache
+ ---> 3ce43d87673f
+Step 6/8 : USER researcher
+ ---> Using cache
+ ---> deff90522ccb
+Step 7/8 : CMD ["python", "summary.py", "data/bookings.csv", "--column", "duration_minutes", "--output", "/tmp/result.json"]
+ ---> Using cache
+ ---> cd4da62485cb
+Step 8/8 : LABEL org.opencontainers.image.revision=6a98207ae6dd92f7f8f49d29c110fbc83710d854
+ ---> Running in b9121717f8d0
+ ---> Removed intermediate container b9121717f8d0
+ ---> d768c121262d
+Successfully built d768c121262d
+Successfully tagged booking-analysis:6a98207ae6dd92f7f8f49d29c110fbc83710d854
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Reproduce analysis)
+[Pipeline] sh
++ mkdir -p results
++ docker create booking-analysis:6a98207ae6dd92f7f8f49d29c110fbc83710d854
++ id=fbcf05e20d38f74b87d2eb210dec4471208c4e9598699b452af38e1934135e74
++ trap docker rm -f "$id" >/dev/null 2>&1 || true EXIT
++ docker start -a fbcf05e20d38f74b87d2eb210dec4471208c4e9598699b452af38e1934135e74
++ docker inspect -f {{.State.ExitCode}} fbcf05e20d38f74b87d2eb210dec4471208c4e9598699b452af38e1934135e74
++ test 0 = 0
++ docker cp fbcf05e20d38f74b87d2eb210dec4471208c4e9598699b452af38e1934135e74:/tmp/result.json results/result.json
++ printf %s
+ 6a98207ae6dd92f7f8f49d29c110fbc83710d854
++ docker image inspect booking-analysis:6a98207ae6dd92f7f8f49d29c110fbc83710d854 --format {{.Id}}
++ cat results/result.json
+{
+  "input_sha256": "008e253486ccc71feddf9fa48bcbeee353e319b0d3c803f8f2251673f43a291d",
+  "column": "duration_minutes",
+  "statistics": {
+    "n": 5,
+    "mean": 72.0,
+    "median": 60.0,
+    "minimum": 30.0,
+    "maximum": 120.0,
+    "sample_sd": 34.20526275297414
+  }
+}
++ docker rm -f fbcf05e20d38f74b87d2eb210dec4471208c4e9598699b452af38e1934135e74
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deploy to local test server)
+[Pipeline] sh
++ docker rm -f assignment5-test
+assignment5-test
++ docker run -d --name assignment5-test -p 127.0.0.1:8086:8000 booking-analysis:6a98207ae6dd92f7f8f49d29c110fbc83710d854 sh -c mkdir -p /tmp/report && python summary.py data/bookings.csv --column duration_minutes --output /tmp/report/result.json && exec python -m http.server 8000 --directory /tmp/report
+041009cc624adbdc99e98113bdaaad1841ebf697186a7a91134b11908b36aede
++ docker exec assignment5-test python -c import json,time,urllib.request; time.sleep(2); r=json.load(urllib.request.urlopen("http://127.0.0.1:8000/result.json")); assert r["statistics"]["mean"] == 72; assert r["statistics"]["n"] == 5; print("Deployment smoke test passed: n=5, mean=72 minutes")
+Deployment smoke test passed: n=5, mean=72 minutes
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Declarative: Post Actions)
+[Pipeline] archiveArtifacts
+Archiving artifacts
+Recording fingerprints
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // timeout
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
+
