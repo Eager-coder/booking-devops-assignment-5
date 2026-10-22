@@ -13,11 +13,12 @@ def auth = new FullControlOnceLoggedInAuthorizationStrategy()
 auth.setAllowAnonymousRead(false)
 j.setAuthorizationStrategy(auth)
 j.setNumExecutors(1)
-if (j.getItem('booking-analysis') == null) {
-  def job = j.createProject(WorkflowJob, 'booking-analysis')
+{ ->
+  def job = j.getItem('booking-analysis') ?: j.createProject(WorkflowJob, 'booking-analysis')
   def scm = new GitSCM('https://github.com/Eager-coder/booking-devops-assignment-5.git')
-  scm.setBranches([new hudson.plugins.git.BranchSpec('*/main')])
+  scm.getBranches().clear()
+  scm.getBranches().add(new hudson.plugins.git.BranchSpec('*/main'))
   job.setDefinition(new CpsScmFlowDefinition(scm, 'Jenkinsfile'))
   job.save()
-}
+}()
 j.save()
